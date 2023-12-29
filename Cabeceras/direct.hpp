@@ -40,31 +40,30 @@ public:
     }
     void clear() { points.clear(); }
 
-    vector<vector<CoorD>> KMeansBruteforce(int k) {
+    std::pair<std::vector<std::vector<CoorD>>, std::vector<CoorD>> KMeans(int k) {
         vector<CoorD> centroids = Centroids(k);
-        return KMeansBruteforce(centroids, 0);
+        return KMeans(centroids, 0);
     }
 
-    vector<vector<CoorD>> KMeansBruteforce(vector<CoorD> centroids, int count) {
-        Direct centers = Direct(centroids);
-        vector<vector<CoorD>> clusters(centroids.size());
+    std::pair<std::vector<std::vector<CoorD>>, std::vector<CoorD>> KMeans(const std::vector<CoorD>& centroids, int count) {
+    Direct centers = Direct(centroids);
+    std::vector<std::vector<CoorD>> clusters(centroids.size());
 
-        for (int i = 0; i < points.size(); i++) {
-            int nearestCentroid = centers.bruteforceNearestCentroid(points[i],centroids);
-            clusters[nearestCentroid].push_back(points[i]);
-        }
-
-        vector<CoorD> newCentroids = ApproximateCentroids(clusters);
-
-        if (count == 10 || newCentroids == centroids) {
-            return clusters;
-        }
-
-        return KMeansBruteforce(newCentroids, count + 1);
+    for (const auto& point : points) {
+        int nearestCentroid = centers.KMeansNearestCentroid(point, centroids);
+        clusters[nearestCentroid].push_back(point);
     }
 
-    // Método para encontrar el centroide más cercano con fuerza bruta
-    int bruteforceNearestCentroid(const CoorD& point, vector<CoorD> centroids) const {
+    std::vector<CoorD> newCentroids = ApproximateCentroids(clusters);
+
+    if (count == 10 || newCentroids == centroids) {
+        return {clusters, newCentroids};
+    }
+
+    return KMeans(newCentroids, count + 1);
+}
+
+    int KMeansNearestCentroid(const CoorD& point, vector<CoorD> centroids) const {
         int nearestCentroid = -1;
         double minDistance = std::numeric_limits<double>::infinity();
 
@@ -139,13 +138,13 @@ public:
         return newCentroids;
     }
 
-    vector<vector<CoorD>> KMeans(int k)
+    vector<vector<CoorD>> KMeansBruteforce(int k)
     {
         vector<CoorD> centroids = Centroids(k);
-        return KMeans(centroids, 0);
+        return KMeansBruteforce(centroids, 0);
     }
 
-    vector<vector<CoorD>> KMeans(vector<CoorD> centroides, int count)
+    vector<vector<CoorD>> KMeansBruteforce(vector<CoorD> centroides, int count)
     {
         Direct centers = Direct(centroides);
         vector<vector<CoorD>> clusters(centroides.size());
@@ -162,7 +161,7 @@ public:
         vector<CoorD> nuevoCentroides = ApproximateCentroids(clusters);
         if (count == 10 || nuevoCentroides == centroides)
             return clusters;
-        return KMeans(nuevoCentroides, count + 1);
+        return KMeansBruteforce(nuevoCentroides, count + 1);
     }
 };
 #endif
