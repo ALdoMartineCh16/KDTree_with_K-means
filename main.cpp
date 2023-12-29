@@ -76,6 +76,10 @@ int main()
         auto end = chrono::high_resolution_clock::now();
         std::vector<std::vector<CoorD>> clusters;
         chrono::duration<double, milli> elapsed;
+
+    // Abrir el archivo
+         std::ofstream archivo2("pruebas.txt");
+         int k;
         do
         {
             cout << "\nSeleccione una operacion:" << endl;
@@ -180,9 +184,11 @@ int main()
                 for (int i = 0; i < clusters.size(); i++)
                 {
                     cout << "Cluster " << i << ":" << clusters[i].size() << endl;
+                    archivo2<<"clusters_"<<to_string(i)<<std::endl;
                     /*
                     for (int j=0; j<clusters[i].size(); j++){
                         std::cout << "(" << clusters[i][j].getX() << ", " << clusters[i][j].getY() << ")" << std::endl;
+                        archivo2<<clusters[i][j].getX() <<" , "<< clusters[i][j].getY() <<std::endl;
                     }*/
 
                 }
