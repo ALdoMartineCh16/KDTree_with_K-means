@@ -68,8 +68,8 @@ int main()
         KDTree kdtree(2);
         Direct direct;
 
-        kdtree = LeerConvertir("data2k.csv");
-        direct = DirectLeerConvertir("data2k.csv");
+        kdtree = LeerConvertir("Resources/data2k.csv");
+        direct = DirectLeerConvertir("Resources/data2k.csv");
         int n;
         vector<CoorD> vecinos;
         int opcion;
@@ -80,7 +80,7 @@ int main()
 
     // Abrir el archivo
          std::ofstream archivo2("pruebas.txt");
-         int k;
+         int k = 50;
         do
         {
             cout << "\nSeleccione una operacion:" << endl;
@@ -157,16 +157,17 @@ int main()
             case 6:
 
                 start = chrono::high_resolution_clock::now();
-                clusters = direct.KMeansBruteforce(18);
+                clusters = direct.KMeansBruteforce(k);
                 end = chrono::high_resolution_clock::now();
                 cout << "Los clusters son:" << std::endl;
                 for (int i = 0; i < clusters.size(); i++)
                 {
                     cout << "Cluster " << i << ":" << clusters[i].size() << endl;
-                        /*
+                    archivo2<<"clusters_"<<to_string(i)<<std::endl;
+
                         for (int j=0; j<clusters[i].size(); j++){
-                            cout << "(" << clusters[i][j].getX() << ", " << clusters[i][j].getY() << ")" << std::endl;
-                        }*/
+                            archivo2<<clusters[i][j].getX() <<" , "<< clusters[i][j].getY() <<endl;
+                        }
 
                 }
                 TimeResponse = end - start;
@@ -175,18 +176,18 @@ int main()
                     break;
             case 7:
                 start = chrono::high_resolution_clock::now();
-                clusters = direct.KMeans(18);
-                end = chrono::high_resolution_clock::now();
+                clusters = direct.KMeans(k);
+                end = chrono::high_resolution_clock::now(); 
                 cout << "Los clusters son:" << std::endl;
                 for (int i = 0; i < clusters.size(); i++)
                 {
                     cout << "Cluster " << i << ":" << clusters[i].size() << endl;
                     archivo2<<"clusters_"<<to_string(i)<<std::endl;
-                    /*
+                    
                     for (int j=0; j<clusters[i].size(); j++){
-                        cout << "(" << clusters[i][j].getX() << ", " << clusters[i][j].getY() << ")" << endl;
+                        //cout << "(" << clusters[i][j].getX() << ", " << clusters[i][j].getY() << ")" << endl;
                         archivo2<<clusters[i][j].getX() <<" , "<< clusters[i][j].getY() <<endl;
-                    }*/
+                    }
 
                 }
                     TimeResponse = end - start;

@@ -21,6 +21,7 @@ class Direct
 {
 private:
     vector<CoorD> points;
+    int maxIteraciones = 10;
 public:
     Direct() {}
     Direct(std::vector<CoorD> points) : points(points) {}
@@ -40,12 +41,12 @@ public:
     }
     void clear() { points.clear(); }
 
-    std::pair<std::vector<std::vector<CoorD>>, std::vector<CoorD>> KMeans(int k) {
+    std::vector<std::vector<CoorD>>KMeans(int k) {
         vector<CoorD> centroids = Centroids(k);
         return KMeans(centroids, 0);
     }
 
-    std::pair<std::vector<std::vector<CoorD>>, std::vector<CoorD>> KMeans(const std::vector<CoorD>& centroids, int count) {
+    std::vector<std::vector<CoorD>>KMeans(const std::vector<CoorD>& centroids, int count) {
     Direct centers = Direct(centroids);
     std::vector<std::vector<CoorD>> clusters(centroids.size());
 
@@ -56,8 +57,8 @@ public:
 
     std::vector<CoorD> newCentroids = ApproximateCentroids(clusters);
 
-    if (count == 10 || newCentroids == centroids) {
-        return {clusters, newCentroids};
+    if (count == maxIteraciones || newCentroids == centroids) {
+        return clusters;
     }
 
     return KMeans(newCentroids, count + 1);
@@ -159,7 +160,7 @@ public:
                 }
         }
         vector<CoorD> nuevoCentroides = ApproximateCentroids(clusters);
-        if (count == 10 || nuevoCentroides == centroides)
+        if (count == maxIteraciones || nuevoCentroides == centroides)
             return clusters;
         return KMeansBruteforce(nuevoCentroides, count + 1);
     }
